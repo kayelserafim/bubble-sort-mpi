@@ -78,15 +78,13 @@ int main() {
 	clock_t begin = clock();
 
 	populate_matrix(matrix);
-	printf("\n Display unsorted array \n");
-	print(matrix);
+	printf("Popula os vetores com os elementos desordenados. \n");
 
 	sort_matrix(matrix);
-	printf("\n Display sorted array \n");
-	print(matrix);
+	printf("Elementos dos vetores ordenados. \n");
 
 	clock_t end = clock();
-	printf("Elapsed: %f seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
+	printf("Tempo: %f seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
 	free(matrix);
 	return 0;
 }
