@@ -11,8 +11,8 @@
 #include<stdlib.h>
 #include<time.h>
 
-#define ROW 10
-#define COLUMN 10
+#define ROW 1000
+#define COLUMN 50000
 
 /*
  * Swap function definition
