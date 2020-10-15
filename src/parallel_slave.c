@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ROW 10
-#define COLUMN 10
+#define ROW 1000
+#define COLUMN 50000
 
 #define PROCESSING_TAG 1
 #define SUICIDE_TAG 2

@@ -48,9 +48,13 @@ openmpi: /usr/lib/x86_64-linux-gnu/openmpi /etc/openmpi /usr/share/openmpi
 
 # Exemplo de compilação e execução
 
-**Compilação em máquina local:** mpicc parallel.c -o parallel.o
+**Compilação C em máquina local:** gcc sequential.c -o sequential
 
-**Execução em máquina local:** mpirun --hostfile ../hostfile -np 4 ./parallel.o
+**Execução C em máquina local:** ./sequential
+
+**Compilação MPI em máquina local:** mpicc parallel.c -o parallel.o
+
+**Execução MPI em máquina local:** mpirun --hostfile ../hostfile -np 4 ./parallel.o
 
 **Execução no lad:** ladrun -np 16 /sequential.o
 

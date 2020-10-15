@@ -77,14 +77,16 @@ int main() {
 	int (*matrix)[COLUMN] = malloc(ROW * sizeof *matrix);
 	clock_t begin = clock();
 
+	printf("Populando vetores com inteiros aleatórios... \n");
 	populate_matrix(matrix);
-	printf("Popula os vetores com os elementos desordenados. \n");
+	printf("Saco de trabalho populado. \n");
 
+	printf("Ordenando vetores... \n");
 	sort_matrix(matrix);
-	printf("Elementos dos vetores ordenados. \n");
+	printf("Saco de trabalho ordenado. \n");
 
 	clock_t end = clock();
-	printf("Tempo: %f seconds\n", (double) (end - begin) / CLOCKS_PER_SEC);
+	printf("Tempo: %f segundos\n", (double) (end - begin) / CLOCKS_PER_SEC);
 	free(matrix);
 	return 0;
 }
