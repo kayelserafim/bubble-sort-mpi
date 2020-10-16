@@ -46,7 +46,7 @@ openmpi: /usr/lib/x86_64-linux-gnu/openmpi /etc/openmpi /usr/share/openmpi
 ![diagram](docs/PathsAndSymbols.png?raw=true "Caminho para configurar o build do MPI no Eclipse")
 
 
-# Exemplo de compilação e execução
+# Exemplos de compilação e execução
 
 **Compilação C em máquina local:** gcc sequential.c -o sequential.o
 

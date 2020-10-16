@@ -24,13 +24,14 @@ void swap(int *a, int *b) {
 }
 
 /*
- * Fill in a matrix according to the number of defined rows and columns.
+ * Fills a matrix according to the number of
+ * rows and columns defined in the worst case
  */
 void populate_matrix(int (*matrix)[COLUMN]) {
 	int i, j;
 	for (i = 0; i < ROW; i++) {
 		for (j = 0; j < COLUMN; j++) {
-			matrix[i][j] = rand() % COLUMN;
+			matrix[i][j] = COLUMN - j;
 		}
 	}
 }
