@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ROW 10
-#define COLUMN 10
+#define ROW 1000
+#define COLUMN 50000
 
 #define TAG_RESULT 0
 #define TAG_ASK_FOR_JOB 1

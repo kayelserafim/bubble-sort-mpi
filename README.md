@@ -56,8 +56,8 @@ openmpi: /usr/lib/x86_64-linux-gnu/openmpi /etc/openmpi /usr/share/openmpi
 
 **Execução MPI em máquina local:** mpirun --hostfile ../hostfile -np 4 ./parallel_slave.o
 
-**Execução no lad:** ladrun -np 16 /sequential.o
+**Execução no lad:** ladrun -np 16 /parallel_slave.o
 
-**Execução no lad:** ladrun -np 16 /sequential.o
+**Execução no lad:** ladrun -np 32 /parallel_slave.o
 
 
