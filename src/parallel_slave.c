@@ -101,7 +101,8 @@ int main(int argc, char **argv) {
 			if (slave_tag == TAG_RESULT) {
 				received_messages++;
 				printf("Source process ID: %d -> ", slave_rank);
-				print(message);
+				// print(message);
+				printf("\n");
 			}
 		}
 
