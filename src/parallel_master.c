@@ -4,7 +4,7 @@
  Author      : Kayel Serafim
  Version     :
  Copyright   :
- Description : Parallel SPMD version of the algorithm in C and MPI following the master / slave model
+ Description : the master / slave model, where the slave who requests tasks.
  ============================================================================
  */
 

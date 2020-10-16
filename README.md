@@ -4,7 +4,7 @@ O objetivo do trabalho é implementar, usando a biblioteca MPI, uma versão para
 
 O mestre ficará responsável pela gerência do saco de trabalho (uma matriz), distribuindo os vetores para os escravos e recebendo de volta os vetores ordenados e guardando-os novamente no saco (a recepção deve ser por ordem de chegada, ou seja, de quem ficar pronto primeiro). A ordem original dos vetores no saco deve ser mantida. Os escravos por sua vez, receberão os vetores a serem ordenados, realizarão a ordenação com o algoritmo fornecido e retornarão o vetor ordenada para o mestre. A iniciativa deve ser dos escravos, ou seja, os escravos pedem trabalho ao mestre que vai atendendo estas demandas até que o saco esteja vazio. Neste momento são enviadas mensagens de suicídio aos escravos. O programa SPMD deve funcionar para qualquer numero de escravos para permitir uma análise da curva do Speed-UP e Eficiência.
 
-![diagram](docs/MS.gif?raw=true "Funcionamento do modelo mestre escravo na ordenação de vários vetores (saco de trabalho)")
+![diagram](images/MS.gif?raw=true "Funcionamento do modelo mestre escravo na ordenação de vários vetores (saco de trabalho)")
 
 Os itens para avaliação são:
 
@@ -43,7 +43,7 @@ openmpi: /usr/lib/x86_64-linux-gnu/openmpi /etc/openmpi /usr/share/openmpi
 
 **OpenMPI path:** /usr/lib/x86_64-linux-gnu/openmpi/include
 
-![diagram](docs/PathsAndSymbols.png?raw=true "Caminho para configurar o build do MPI no Eclipse")
+![diagram](images/PathsAndSymbols.png?raw=true "Caminho para configurar o build do MPI no Eclipse")
 
 
 # Exemplos de compilação e execução
