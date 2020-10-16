@@ -82,7 +82,6 @@ int main(int argc, char **argv) {
 	MPI_Comm_size(MPI_COMM_WORLD, &proc_n); // pega informação do numero de processos (quantidade total)
 
 	if (my_rank == 0) {
-		// papel do mestre, mando o trabalho para os escravos fazerem
 		int outgoing_messages = 0;
 		int received_messages = 0;
 		populate_matrix(matrix);
