@@ -12,12 +12,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ROW 1000
-#define COLUMN 50000
+#define ROW 10
+#define COLUMN 10
 
-#define PROCESSING_TAG 1
-#define SUICIDE_TAG 2
-#define TAG_ASK_FOR_JOB 3
+#define TAG_RESULT 0
+#define TAG_ASK_FOR_JOB 1
+#define TAG_JOB_DATA 2
+#define TAG_SUICIDE 3
 
 /*
  * Display the vector
@@ -66,13 +67,6 @@ void bubble_sort(int vector[]) {
 	}
 }
 
-void master() {
-	MPI_Status stat, stat2;
-	// Wait for any incomming message
-	MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &stat);
-
-}
-
 int main(int argc, char **argv) {
 	int my_rank; // Identificador do processo
 	int proc_n; // Número de processos
@@ -94,37 +88,47 @@ int main(int argc, char **argv) {
 		populate_matrix(matrix);
 
 		while (outgoing_messages < ROW && received_messages < ROW) {
-			// Envio as mensagens (vetores)
-			for (source = 1; source < proc_n && outgoing_messages < ROW; source++) {
-				MPI_Send(matrix[outgoing_messages], COLUMN, MPI_INT, source, PROCESSING_TAG, MPI_COMM_WORLD);
+			MPI_Recv(&message, COLUMN, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+			int slave_rank = status.MPI_SOURCE;
+			int slave_tag = status.MPI_TAG;
+
+			// Esperamos a solicitação de tarefa por um escravo
+			if (slave_tag == TAG_ASK_FOR_JOB) {
+				MPI_Send(matrix[outgoing_messages], COLUMN, MPI_INT, slave_rank, TAG_JOB_DATA, MPI_COMM_WORLD);
 				outgoing_messages++;
 			}
 			// Recebo as mensagens ordenadas (vetores ordenados)
-			for (source = 1; source < proc_n && received_messages < ROW; source++) {
-				MPI_Recv(&message, COLUMN, MPI_INT, source, PROCESSING_TAG, MPI_COMM_WORLD, &status);
+			if (slave_tag == TAG_RESULT) {
 				received_messages++;
-				printf("Source process ID: %d -> ", source);
+				printf("Source process ID: %d -> ", slave_rank);
 				print(message);
 			}
 		}
 
 		// Caso o saco esteja vazio, neste momento envio mensagens de suicídio aos escravos.
 		for (source = 1; source < proc_n; source++) {
-			MPI_Send(0, 0, MPI_INT, source, SUICIDE_TAG, MPI_COMM_WORLD);
+			MPI_Send(0, 0, MPI_INT, source, TAG_SUICIDE, MPI_COMM_WORLD);
 		}
 	} else {
-		do {
-			// recebo do mestre
+		while (1) {
+			// Aqui nós enviamos uma mensagem para o mestre pedindo um trabalho
+			MPI_Send(&message, COLUMN, MPI_INT, 0, TAG_ASK_FOR_JOB, MPI_COMM_WORLD);
+
+			// Recebo do mestre
 			MPI_Recv(&message, COLUMN, MPI_INT, 0, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+
 			// Caso receba uma tag de suicídio
-			if (status.MPI_TAG == 2) {
+			if (status.MPI_TAG == TAG_SUICIDE) {
 				MPI_Finalize();
 				return 0;
 			}
-			bubble_sort(message);
-			// retorno resultado para o mestre
-			MPI_Send(&message, COLUMN, MPI_INT, 0, PROCESSING_TAG, MPI_COMM_WORLD);
-		} while (status.MPI_TAG == 1);
+			// Caso recebamos uma tarefa do mestre
+			if (status.MPI_TAG == TAG_JOB_DATA) {
+				bubble_sort(message);
+				// retorno resultado para o mestre
+				MPI_Send(&message, COLUMN, MPI_INT, 0, TAG_RESULT, MPI_COMM_WORLD);
+			}
+		}
 	}
 	t1 = MPI_Wtime();
 	printf("Time %f\n", t1 - t0);
