@@ -4,7 +4,7 @@
  Author      : Kayel Serafim
  Version     :
  Copyright   :
- Description : the master / slave model, where the slave who requests tasks.
+ Description : the master / slave model, where the master distributes the tasks.
  ============================================================================
  */
 
