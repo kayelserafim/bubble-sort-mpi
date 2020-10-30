@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG 0
+
 #define ROW 1000
 #define COLUMN 50000
 
@@ -54,17 +56,21 @@ void populate_matrix(int (*matrix)[COLUMN]) {
 }
 
 /*
- * Bubble Sort for a vector of integers, reference:
- * https://www.inf.pucrs.br/~pinho/ProgEngII/Exercicios/Struct/ExerStructs2.html
+ * Buble sort algorithm.
  */
-void bubble_sort(int vector[]) {
-	int i, j;
-	for (i = COLUMN - 1; i > 0; i--) {
-		for (j = 0; j < i; j++) {
-			if (vector[j] > vector[j + 1]) {
-				swap(&vector[j], &vector[j + 1]);
+void bs(int n, int *vetor) {
+	int c = 0, d, troca, trocou = 1;
+
+	while ((c < (n - 1)) & trocou) {
+		trocou = 0;
+		for (d = 0; d < n - c - 1; d++)
+			if (vetor[d] > vetor[d + 1]) {
+				troca = vetor[d];
+				vetor[d] = vetor[d + 1];
+				vetor[d + 1] = troca;
+				trocou = 1;
 			}
-		}
+		c++;
 	}
 }
 
@@ -101,7 +107,10 @@ int main(int argc, char **argv) {
 			if (slave_tag == TAG_RESULT) {
 				received_messages++;
 				printf("Source process ID: %d -> ", slave_rank);
-				// print(message);
+#if DEBUG
+				printf("Mensagens ordenadas:\n");
+				print(message);
+#endif
 				printf("\n");
 			}
 		}
@@ -125,7 +134,7 @@ int main(int argc, char **argv) {
 			}
 			// Caso recebamos uma tarefa do mestre
 			if (status.MPI_TAG == TAG_JOB_DATA) {
-				bubble_sort(message);
+				bs(COLUMN, message);
 				// retorno resultado para o mestre
 				MPI_Send(&message, COLUMN, MPI_INT, 0, TAG_RESULT, MPI_COMM_WORLD);
 			}

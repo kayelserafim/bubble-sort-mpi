@@ -11,6 +11,7 @@
 #include<stdlib.h>
 #include<time.h>
 
+#define DEBUG 0
 #define ROW 1000
 #define COLUMN 50000
 
@@ -37,17 +38,21 @@ void populate_matrix(int (*matrix)[COLUMN]) {
 }
 
 /*
- * Bubble Sort for a vector of integers, reference:
- * https://www.inf.pucrs.br/~pinho/ProgEngII/Exercicios/Struct/ExerStructs2.html
+ * Buble sort algorithm.
  */
-void bubble_sort(int vector[]) {
-	int i, j;
-	for (i = COLUMN - 1; i > 0; i--) {
-		for (j = 0; j < i; j++) {
-			if (vector[j] > vector[j + 1]) {
-				swap(&vector[j], &vector[j + 1]);
+void bs(int n, int *vetor) {
+	int c = 0, d, troca, trocou = 1;
+
+	while ((c < (n - 1)) & trocou) {
+		trocou = 0;
+		for (d = 0; d < n - c - 1; d++)
+			if (vetor[d] > vetor[d + 1]) {
+				troca = vetor[d];
+				vetor[d] = vetor[d + 1];
+				vetor[d + 1] = troca;
+				trocou = 1;
 			}
-		}
+		c++;
 	}
 }
 
@@ -57,7 +62,7 @@ void bubble_sort(int vector[]) {
 void sort_matrix(int (*matrix)[COLUMN]) {
 	int i;
 	for (i = 0; i < ROW; i++) {
-		bubble_sort(matrix[i]);
+		bs(COLUMN, matrix[i]);
 	}
 }
 
@@ -82,9 +87,19 @@ int main() {
 	populate_matrix(matrix);
 	printf("Saco de trabalho populado. \n");
 
+#if DEBUG
+	printf("Matriz desordenada:\n");
+	print(matrix);
+#endif
+
 	printf("Ordenando vetores... \n");
 	sort_matrix(matrix);
 	printf("Saco de trabalho ordenado. \n");
+
+#if DEBUG
+	printf("Matriz ordenada:\n");
+	print(matrix);
+#endif
 
 	clock_t end = clock();
 	printf("Tempo: %f segundos\n", (double) (end - begin) / CLOCKS_PER_SEC);
