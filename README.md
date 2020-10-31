@@ -15,6 +15,114 @@ Os itens para avaliação são:
 * análise do balanceamento da carga na execução do programa paralelo;
 * clareza do código (utilização de comentários e nomes de variáveis adequadas);
 
+Código do algoritmo Bubble Sort
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+#define DEBUG 1            // comentar esta linha quando for medir tempo
+#define ARRAY_SIZE 40      // trabalho final com o valores 10.000, 100.000, 1.000.000
+
+void bs(int n, int * vetor)
+{
+    int c=0, d, troca, trocou =1;
+
+    while (c < (n-1) & trocou )
+        {
+        trocou = 0;
+        for (d = 0 ; d < n - c - 1; d++)
+            if (vetor[d] > vetor[d+1])
+                {
+                troca      = vetor[d];
+                vetor[d]   = vetor[d+1];
+                vetor[d+1] = troca;
+                trocou = 1;
+                }
+        c++;
+        }
+}
+```
+
+```
+int main()
+{
+    int vetor[ARRAY_SIZE];
+    int i;
+
+    for (i=0 ; i<ARRAY_SIZE; i++)              /* init array with worst case for sorting */
+        vetor[i] = ARRAY_SIZE-i;
+   
+
+    #ifdef DEBUG
+    printf("\nVetor: ");
+    for (i=0 ; i<ARRAY_SIZE; i++)              /* print unsorted array */
+        printf("[%03d] ", vetor[i]);
+    #endif
+
+    bs(ARRAY_SIZE, vetor);                     /* sort array */
+
+
+    #ifdef DEBUG
+    printf("\nVetor: ");
+    for (i=0 ; i<ARRAY_SIZE; i++)                              /* print sorted array */
+        printf("[%03d] ", vetor[i]);
+    #endif
+
+    return 0;
+}
+```
+
+Pseudocódigo ME básico (orientação no mestre)
+
+```
+#define TAREFAS 7 // Numero de tarefas no saco de trabalho para np = 8, processo 0 é o mestre
+
+int my_rank;       // Identificador deste processo
+int proc_n;        // Numero de processos disparados pelo usuário na linha de comando (np)
+int message;       // Buffer para as mensagens 
+int saco[TAREFAS]; // saco de trabalho
+
+
+MPI_Init(); // funcao que inicializa o MPI, todo o código paralelo esta abaixo
+
+my_rank = MPI_Comm_rank();  // pega pega o numero do processo atual (rank)
+proc_n  = MPI_Comm_size();  // pega informação do numero de processos (quantidade total)
+
+if ( my_rank == 0 ) // qual o meu papel: sou o mestre ou um dos escravos?
+   {
+   // papel do mestre
+
+   for ( i=0 ; i < TAREFAS ; i++) // mando o trabalho para os escravos fazerem
+       {
+       message = saco[i];
+       MPI_Send(&message, i+1); // envio trabalho saco[i] para escravo com id = i+1;
+       } 
+
+    // recebo o resultado
+
+    for ( i=0 ; i < TAREFAS ; i++)
+        {
+        // recebo mensagens de qualquer emissor e com qualquer etiqueta (TAG)
+
+        MPI_Recv(&message, MPI_ANY_SOURCE, MPI_ANY_TAG, status);  // recebo por ordem de chegada com any_source
+
+        saco[status.MPI_SOURCE-1] = message;   // coloco mensagem no saco na posição do escravo emissor
+        }
+     }              
+else               
+     {
+     // papel do escravo
+
+     MPI_Recv(&message, 0);    // recebo do mestre
+
+     message = message+1;      // icremento conteúdo da mensagem
+
+     MPI_Send(&message, 0);    // retorno resultado para o mestre
+     }
+
+MPI_Finalize();
+```
 
 # Tamanho do vetor no TPP1
 
@@ -23,6 +131,7 @@ Como o algoritmo Bubble é quadrático, executar os testes com 1000 vetores de 1
 Se quiserem escolher algum ponto e testar com um tamanho de vetor diferente pra ver se o fator de aceleração se mantem, pode ser interessante (tipo 16 e 32).
 
 Ex: comparar o fator de aceleração de 1000 vetores de 50000 elementos para 16 e 32 processos (HT em duas máquinas) contra 1000 vetores de 100000 elementos com os mesmos 16 e 32 processos (só destacando que vão precisar medir para 1 processo pra conseguir calcular o fator de aceleração com o novo tamanho de vetor). 
+
 
 # Instalação do OpenMPI no Ubuntu 20.04
 

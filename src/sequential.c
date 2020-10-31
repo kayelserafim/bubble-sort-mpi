@@ -16,15 +16,6 @@
 #define COLUMN 50000
 
 /*
- * Swap function definition
- */
-void swap(int *a, int *b) {
-	int temp = *a;
-	*a = *b;
-	*b = temp;
-}
-
-/*
  * Fills a matrix according to the number of
  * rows and columns defined in the worst case
  */
@@ -38,7 +29,7 @@ void populate_matrix(int (*matrix)[COLUMN]) {
 }
 
 /*
- * Buble sort algorithm.
+ * Bubble sort algorithm.
  */
 void bs(int n, int *vetor) {
 	int c = 0, d, troca, trocou = 1;
